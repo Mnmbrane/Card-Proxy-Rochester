@@ -1,71 +1,141 @@
+# MTG Card Proxy Generator
+
 <div align="center">
 
-  <h1><code>wasm-pack-template</code></h1>
-
-  <strong>A template for kick starting a Rust and WebAssembly project using <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>.</strong>
+  <h3>🃏 A Magic: The Gathering proxy card generator built with Rust + WebAssembly</h3>
 
   <p>
-    <a href="https://travis-ci.org/rustwasm/wasm-pack-template"><img src="https://img.shields.io/travis/rustwasm/wasm-pack-template.svg?style=flat-square" alt="Build Status" /></a>
+    <strong>Enter card names, get high-quality proxy images. No backend required!</strong>
   </p>
 
-  <h3>
-    <a href="https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/index.html">Tutorial</a>
-    <span> | </span>
-    <a href="https://discordapp.com/channels/442252698964721669/443151097398296587">Chat</a>
-  </h3>
-
-  <sub>Built with 🦀🕸 by <a href="https://rustwasm.github.io/">The Rust and WebAssembly Working Group</a></sub>
 </div>
 
-## About
+## ✨ Features
 
-[**📚 Read this template tutorial! 📚**][template-docs]
+- **Bulk Card Input**: Supports "4x Lightning Bolt" quantity format
+- **Scryfall Integration**: Fetches official card data and images
+- **Fast Performance**: Core logic runs in WebAssembly
+- **Mobile Friendly**: Responsive design for all devices
+- **No Backend**: Everything runs in your browser
+- **Free Hosting**: Deploy to GitHub Pages
 
-This template is designed for compiling Rust libraries into WebAssembly and
-publishing the resulting package to NPM.
+## 🚀 Quick Start
 
-Be sure to check out [other `wasm-pack` tutorials online][tutorials] for other
-templates and usages of `wasm-pack`.
+### Prerequisites
+- [Rust](https://rustup.rs/) with `wasm32-unknown-unknown` target
+- [wasm-pack](https://rustwasm.github.io/wasm-pack/installer/)
+- Python 3 (for local server)
 
-[tutorials]: https://rustwasm.github.io/docs/wasm-pack/tutorials/index.html
-[template-docs]: https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/index.html
+### Development
 
-## 🚴 Usage
+1. **Clone and setup**
+   ```bash
+   git clone <your-repo>
+   cd card-proxy-wasm
+   ```
 
-### 🐑 Use `cargo generate` to Clone this Template
+2. **Build the WASM module**
+   ```bash
+   npm run build
+   ```
 
-[Learn more about `cargo generate` here.](https://github.com/ashleygwilliams/cargo-generate)
+3. **Start development server**
+   ```bash
+   npm run serve
+   ```
+
+4. **Open in browser**
+   ```
+   http://localhost:8000
+   ```
+
+## 🏗️ Architecture
 
 ```
-cargo generate --git https://github.com/rustwasm/wasm-pack-template.git --name my-project
-cd my-project
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   JavaScript    │───▶│   Rust + WASM    │───▶│  Scryfall API   │
+│   (Frontend)    │    │  (Card Parser)   │    │   (Card Data)   │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
-### 🛠️ Build with `wasm-pack build`
+- **JavaScript**: Handles UI, DOM manipulation, and WASM integration
+- **Rust/WASM**: Parses card input, makes API calls, processes data
+- **Scryfall API**: Provides official MTG card data and images
 
-```
-wasm-pack build
-```
+## 📝 Usage Examples
 
-### 🔬 Test in Headless Browsers with `wasm-pack test`
-
+**Input formats supported:**
 ```
-wasm-pack test --headless --firefox
-```
-
-### 🎁 Publish to NPM with `wasm-pack publish`
-
-```
-wasm-pack publish
+Lightning Bolt
+4x Lightning Bolt
+2x Counterspell
+Black Lotus
+3x Sol Ring
 ```
 
-## 🔋 Batteries Included
+**The app will:**
+1. Parse quantities and card names
+2. Fetch data from Scryfall API
+3. Display card images and details
+4. Handle fuzzy name matching
 
-* [`wasm-bindgen`](https://github.com/rustwasm/wasm-bindgen) for communicating
-  between WebAssembly and JavaScript.
-* [`console_error_panic_hook`](https://github.com/rustwasm/console_error_panic_hook)
-  for logging panic messages to the developer console.
-* `LICENSE-APACHE` and `LICENSE-MIT`: most Rust projects are licensed this way, so these are included for you
+## 🛠️ Build Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Compile Rust to WASM |
+| `npm run serve` | Start local development server |
+| `npm run dev` | Build + serve in one command |
+
+## 📦 Project Structure
+
+```
+card-proxy-wasm/
+├── src/                    # Rust source code
+│   ├── lib.rs             # Main WASM bindings
+│   └── utils.rs           # Utility functions
+├── www/                   # Web frontend
+│   ├── index.html         # Main HTML page
+│   ├── css/style.css      # Responsive styling
+│   ├── js/main.js         # JavaScript WASM integration
+│   └── pkg/               # Generated WASM files (gitignored)
+├── Cargo.toml             # Rust dependencies
+└── package.json           # Build scripts
+```
+
+## 🔧 WASM Interface
+
+The JavaScript frontend expects these Rust functions:
+
+```rust
+// Initialize panic handling
+pub fn init_panic_hook()
+
+// Process card input and return structured data
+pub async fn process_card_input(input: &str) -> Result<JsValue, JsValue>
+```
+
+Expected return format:
+```rust
+struct ProcessedCard {
+    quantity: u32,
+    card_data: CardData, // name, image_uris, set_name, type_line, etc.
+}
+```
+
+## 🚀 Deployment
+
+### GitHub Pages
+1. Build the project: `npm run build`
+2. Push the `www/` directory to `gh-pages` branch
+3. Enable GitHub Pages in repository settings
+
+### Other Static Hosts
+The `www/` directory contains everything needed for deployment to:
+- Netlify
+- Vercel  
+- Firebase Hosting
+- Any static file host
 
 ## License
 
