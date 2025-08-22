@@ -3,11 +3,13 @@
 Cargo.lock
 
 # WASM generated files
+frontend/pkg/
 www/pkg/
 
 # Node
 node_modules/
 npm-debug.log*
+dist/
 
 # OS
 .DS_Store
