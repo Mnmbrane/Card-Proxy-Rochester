@@ -1,0 +1,13 @@
+{
+  "name": "mtg-proxy-wasm",
+  "version": "0.1.0",
+  "description": "MTG Card Proxy Generator using Rust+WASM",
+  "scripts": {
+    "build": "wasm-pack build --target web --out-dir www/pkg",
+    "serve": "python3 -m http.server 8000 --directory www",
+    "dev": "npm run build && npm run serve"
+  },
+  "keywords": ["mtg", "wasm", "rust", "proxy", "cards"],
+  "author": "",
+  "license": "MIT"
+}
