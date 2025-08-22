@@ -24,7 +24,7 @@
 ### Prerequisites
 - [Rust](https://rustup.rs/) with `wasm32-unknown-unknown` target
 - [wasm-pack](https://rustwasm.github.io/wasm-pack/installer/)
-- Python 3 (for local server)
+- [Node.js](https://nodejs.org/) (for frontend development)
 
 ### Development
 
@@ -36,17 +36,19 @@
 
 2. **Build the WASM module**
    ```bash
-   npm run build
+   wasm-pack build
    ```
 
-3. **Start development server**
+3. **Setup and start frontend**
    ```bash
-   npm run serve
+   cd frontend
+   npm install
+   npm start
    ```
 
 4. **Open in browser**
    ```
-   http://localhost:8000
+   http://localhost:8080
    ```
 
 ## 🏗️ Architecture
@@ -83,9 +85,9 @@ Black Lotus
 
 | Command | Description |
 |---------|-------------|
-| `npm run build` | Compile Rust to WASM |
-| `npm run serve` | Start local development server |
-| `npm run dev` | Build + serve in one command |
+| `wasm-pack build` | Compile Rust to WASM (run in root) |
+| `npm install` | Install frontend dependencies (run in frontend/) |
+| `npm start` | Start webpack dev server (run in frontend/) |
 
 ## 📦 Project Structure
 
@@ -94,13 +96,15 @@ card-proxy-wasm/
 ├── src/                    # Rust source code
 │   ├── lib.rs             # Main WASM bindings
 │   └── utils.rs           # Utility functions
-├── www/                   # Web frontend
+├── frontend/              # Web frontend
 │   ├── index.html         # Main HTML page
 │   ├── css/style.css      # Responsive styling
 │   ├── js/main.js         # JavaScript WASM integration
-│   └── pkg/               # Generated WASM files (gitignored)
+│   ├── package.json       # Frontend dependencies
+│   └── webpack.config.js  # Webpack configuration
+├── pkg/                   # Generated WASM files (gitignored)
 ├── Cargo.toml             # Rust dependencies
-└── package.json           # Build scripts
+└── docs/                  # Documentation and demo files
 ```
 
 ## 🔧 WASM Interface
@@ -126,12 +130,12 @@ struct ProcessedCard {
 ## 🚀 Deployment
 
 ### GitHub Pages
-1. Build the project: `npm run build`
-2. Push the `www/` directory to `gh-pages` branch
+1. Build the project: `wasm-pack build` then `cd frontend && npm run build`
+2. Push the `frontend/dist/` directory to `gh-pages` branch
 3. Enable GitHub Pages in repository settings
 
 ### Other Static Hosts
-The `www/` directory contains everything needed for deployment to:
+The `frontend/dist/` directory contains everything needed for deployment to:
 - Netlify
 - Vercel  
 - Firebase Hosting

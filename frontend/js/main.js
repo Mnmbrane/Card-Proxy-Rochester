@@ -1,4 +1,4 @@
-import init, { process_card_input, init_panic_hook } from '../pkg/card_proxy_wasm.js';
+// import init, { process_card_input, init_panic_hook } from '../../pkg/card_proxy_wasm.js';
 
 class MTGProxyApp {
   constructor() {
@@ -18,9 +18,9 @@ class MTGProxyApp {
 
   async init() {
     try {
-      // Initialize WASM module
-      this.wasmModule = await init();
-      init_panic_hook();
+      // // Initialize WASM module
+      // this.wasmModule = await init();
+      // init_panic_hook();
 
       // Set up event listeners
       this.setupEventListeners();
@@ -56,8 +56,22 @@ class MTGProxyApp {
     try {
       this.showLoading();
 
-      // Call the WASM function to process card input
-      const results = await process_card_input(input);
+      // // Call the WASM function to process card input
+      // const results = await process_card_input(input);
+      
+      // Placeholder for now - just show a demo card
+      const results = [
+        {
+          quantity: 1,
+          card_data: {
+            name: "Lightning Bolt",
+            set_name: "Alpha",
+            type_line: "Instant",
+            mana_cost: "{R}",
+            oracle_text: "Lightning Bolt deals 3 damage to any target."
+          }
+        }
+      ];
 
       this.displayResults(results);
     } catch (error) {

@@ -8,7 +8,13 @@
     "dev": "npm run build && npm run serve",
     "deploy": "npm run build && cp -r frontend/css frontend/js docs/ && cp frontend/mtg-index.html docs/index.html"
   },
-  "keywords": ["mtg", "wasm", "rust", "proxy", "cards"],
+  "keywords": [
+    "mtg",
+    "wasm",
+    "rust",
+    "proxy",
+    "cards"
+  ],
   "author": "",
   "license": "MIT"
 }
