@@ -25,9 +25,10 @@ class MTGProxyApp {
       // Set up event listeners
       this.setupEventListeners();
 
-      console.log('MTG Proxy App initialized successfully');
+      // Check for pre-filled cards from localStorage/URL
+      this.loadCardsFromURL();
     } catch (error) {
-      console.error('Failed to initialize WASM module:', error);
+      console.error('Failed to initialize:', error);
       this.showError('Failed to initialize the application. Please refresh the page.');
     }
   }
@@ -58,7 +59,7 @@ class MTGProxyApp {
 
       // // Call the WASM function to process card input
       // const results = await process_card_input(input);
-      
+
       // Placeholder for now - just show a demo card
       const results = [
         {
@@ -150,9 +151,40 @@ class MTGProxyApp {
     div.textContent = text;
     return div.innerHTML;
   }
+
+  loadCardsFromURL() {
+    // First try localStorage (from browser page)
+    const storedCards = localStorage.getItem('selectedCards');
+    
+    if (storedCards) {
+      this.elements.cardInput.value = storedCards;
+      
+      // Clear localStorage after loading to prevent reuse
+      localStorage.removeItem('selectedCards');
+      return;
+    }
+    
+    // Fallback to URL parameters (for backwards compatibility)
+    const urlParams = new URLSearchParams(window.location.search);
+    const cardsParam = urlParams.get('cards');
+    
+    if (cardsParam) {
+      const decodedCards = decodeURIComponent(cardsParam);
+      this.elements.cardInput.value = decodedCards;
+      
+      // Clear the URL parameter after loading
+      const newUrl = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, newUrl);
+    }
+  }
 }
 
 // Initialize the app when the page loads
 document.addEventListener('DOMContentLoaded', () => {
   new MTGProxyApp();
 });
+
+// Also try immediate initialization if DOM is already ready
+if (document.readyState !== 'loading') {
+  new MTGProxyApp();
+}
