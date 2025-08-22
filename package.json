@@ -4,9 +4,8 @@
   "description": "MTG Card Proxy Generator using Rust+WASM",
   "scripts": {
     "build": "wasm-pack build --target web --out-dir docs/pkg",
-    "serve": "python3 -m http.server 8000 --directory docs",
-    "dev": "npm run build && npm run serve",
-    "deploy": "npm run build && cp -r frontend/css frontend/js docs/ && cp frontend/mtg-index.html docs/index.html"
+    "serve": "cd frontend && npm start",
+    "deploy": "npm run build && cp -r frontend/css frontend/js docs/ && cp frontend/index.html docs/index.html"
   },
   "keywords": [
     "mtg",

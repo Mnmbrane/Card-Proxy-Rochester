@@ -1,4 +1,4 @@
-import init, { process_card_input, init_panic_hook } from '../pkg/card_proxy_wasm.js';
+// import init, { process_card_input, init_panic_hook } from '../../pkg/card_proxy_wasm.js';
 
 class MTGProxyApp {
   constructor() {
@@ -18,16 +18,17 @@ class MTGProxyApp {
 
   async init() {
     try {
-      // Initialize WASM module
-      this.wasmModule = await init();
-      init_panic_hook();
+      // // Initialize WASM module
+      // this.wasmModule = await init();
+      // init_panic_hook();
 
       // Set up event listeners
       this.setupEventListeners();
 
-      console.log('MTG Proxy App initialized successfully');
+      // Check for pre-filled cards from localStorage/URL
+      this.loadCardsFromURL();
     } catch (error) {
-      console.error('Failed to initialize WASM module:', error);
+      console.error('Failed to initialize:', error);
       this.showError('Failed to initialize the application. Please refresh the page.');
     }
   }
@@ -56,8 +57,22 @@ class MTGProxyApp {
     try {
       this.showLoading();
 
-      // Call the WASM function to process card input
-      const results = await process_card_input(input);
+      // // Call the WASM function to process card input
+      // const results = await process_card_input(input);
+
+      // Placeholder for now - just show a demo card
+      const results = [
+        {
+          quantity: 1,
+          card_data: {
+            name: "Lightning Bolt",
+            set_name: "Alpha",
+            type_line: "Instant",
+            mana_cost: "{R}",
+            oracle_text: "Lightning Bolt deals 3 damage to any target."
+          }
+        }
+      ];
 
       this.displayResults(results);
     } catch (error) {
@@ -136,9 +151,40 @@ class MTGProxyApp {
     div.textContent = text;
     return div.innerHTML;
   }
+
+  loadCardsFromURL() {
+    // First try localStorage (from browser page)
+    const storedCards = localStorage.getItem('selectedCards');
+
+    if (storedCards) {
+      this.elements.cardInput.value = storedCards;
+
+      // Clear localStorage after loading to prevent reuse
+      localStorage.removeItem('selectedCards');
+      return;
+    }
+
+    // Fallback to URL parameters (for backwards compatibility)
+    const urlParams = new URLSearchParams(window.location.search);
+    const cardsParam = urlParams.get('cards');
+
+    if (cardsParam) {
+      const decodedCards = decodeURIComponent(cardsParam);
+      this.elements.cardInput.value = decodedCards;
+
+      // Clear the URL parameter after loading
+      const newUrl = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, newUrl);
+    }
+  }
 }
 
 // Initialize the app when the page loads
 document.addEventListener('DOMContentLoaded', () => {
   new MTGProxyApp();
 });
+
+// Also try immediate initialization if DOM is already ready
+if (document.readyState !== 'loading') {
+  new MTGProxyApp();
+}

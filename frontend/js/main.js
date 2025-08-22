@@ -155,23 +155,23 @@ class MTGProxyApp {
   loadCardsFromURL() {
     // First try localStorage (from browser page)
     const storedCards = localStorage.getItem('selectedCards');
-    
+
     if (storedCards) {
       this.elements.cardInput.value = storedCards;
-      
+
       // Clear localStorage after loading to prevent reuse
       localStorage.removeItem('selectedCards');
       return;
     }
-    
+
     // Fallback to URL parameters (for backwards compatibility)
     const urlParams = new URLSearchParams(window.location.search);
     const cardsParam = urlParams.get('cards');
-    
+
     if (cardsParam) {
       const decodedCards = decodeURIComponent(cardsParam);
       this.elements.cardInput.value = decodedCards;
-      
+
       // Clear the URL parameter after loading
       const newUrl = window.location.origin + window.location.pathname;
       window.history.replaceState({}, document.title, newUrl);

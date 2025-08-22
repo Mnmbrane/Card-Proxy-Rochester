@@ -3,38 +3,49 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MTG Card Proxy Generator</title>
+    <title>MTG Card Proxy Printer</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>MTG Card Proxy Generator</h1>
-            <p>Enter MTG card names to generate proxy images. Supports quantity format like "4x Lightning Bolt".</p>
+            <h1>MTG Card Proxy Printer</h1>
+            <p>Browse popular cards or create custom proxy prints for your Magic: The Gathering collection.</p>
+            <nav class="header-nav">
+                <a href="generator.html" class="nav-button">Custom Generator</a>
+            </nav>
         </header>
         
         <main>
-            <section class="input-section">
-                <textarea 
-                    id="card-input" 
-                    placeholder="Enter card names, one per line:&#10;4x Lightning Bolt&#10;2x Counterspell&#10;Black Lotus"
-                    rows="8"></textarea>
-                <button id="generate-btn" type="button">Generate Cards</button>
+            <section class="browse-section">
+                <h2>Popular Cards</h2>
+                <div class="card-categories">
+                    <button class="category-btn active" data-category="all">All Cards</button>
+                    <button class="category-btn" data-category="creatures">Creatures</button>
+                    <button class="category-btn" data-category="spells">Spells</button>
+                    <button class="category-btn" data-category="lands">Lands</button>
+                    <button class="category-btn" data-category="artifacts">Artifacts</button>
+                </div>
+                
+                <div class="search-section">
+                    <input type="text" id="card-search" placeholder="Search for cards..." class="search-input">
+                    <button id="search-btn" class="search-button">Search</button>
+                </div>
+                
+                <div class="card-browser" id="card-browser">
+                    <!-- Cards will be populated here -->
+                </div>
             </section>
             
-            <section class="loading-section" id="loading" style="display: none;">
-                <div class="spinner"></div>
-                <p>Fetching card data from Scryfall...</p>
-            </section>
-            
-            <section class="results-section" id="results" style="display: none;">
-                <h2>Generated Cards</h2>
-                <div id="card-grid" class="card-grid"></div>
-            </section>
-            
-            <section class="error-section" id="error" style="display: none;">
-                <h2>Error</h2>
-                <p id="error-message"></p>
+            <section class="selected-section" id="selected-section" style="display: none;">
+                <h2>Selected Cards</h2>
+                <div class="selected-cards" id="selected-cards">
+                    <!-- Selected cards will appear here -->
+                </div>
+                <div class="print-actions">
+                    <button id="print-selected" class="print-button">Print Selected Cards</button>
+                    <button id="clear-selected" class="clear-button">Clear Selection</button>
+                </div>
             </section>
         </main>
         
@@ -44,6 +55,6 @@
         </footer>
     </div>
     
-    <script type="module" src="js/main.js"></script>
+    <script src="js/browser.js"></script>
 </body>
 </html>
